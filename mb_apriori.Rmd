@@ -1,0 +1,116 @@
+---
+title: "mb_apriori"
+author: "Vijayasri Vijith"
+date: "2024-08-14"
+output:
+  pdf_document: default
+  word_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+```{r}
+
+library(arules)
+```
+```{r}
+file<-read.transactions("D:\\vijayasri\\R programs\\Market_Basket_Optimisation.csv", sep=",", rm.duplicates=TRUE)
+```
+```{r}
+dim(file)
+```
+```{r}
+summary(file)
+```
+```{r}
+itemLabels(file)
+```
+```{r}
+image(file[1:50])
+```
+```{r}
+itemFrequencyPlot(file,topN=20)
+```
+```{r}
+itemFrequencyPlot(file,topN=20,type="absolute", col="red")
+```
+```{r}
+itemFrequencyPlot(file,topN=20,type="relative",col="green")
+```
+```{r}
+```
+
+
+```{r}
+install.packages("arulesViz")
+```
+```{r}
+library(arules)
+library(arulesViz)
+```
+```{r}
+rules=apriori(file,parameter = list(supp=0.004,conf=0.5,maxlen=20))
+```
+```{r}
+summary(rules)
+```
+```{r}
+inspect(rules)
+```
+```{r}
+inspect(sort(rules,by='lift')[1:20])
+```
+```{r}
+subrules <- rules[quality(rules)$conf>0.4]
+```
+```{r}
+inspect(subrules)
+```
+```{r}
+plot(subrules)
+```
+```{r}
+top10rules<-head(subrules,n=10,by='conf')
+plot(top10rules,method="graph")
+```
+```{r}
+plot(rules)
+```
+```{r}
+plot(rules, measure = 'conf')
+```
+```{r}
+plot(rules,method = "two-key plot")
+```
+```{r}
+plot(rules,engine = "plotly")
+```
+```{r}
+subrules <- head(rules,n=10, by="conf")
+plot(subrules,method = "graph", engine = "htmlwidget")
+```
+```{r}
+plot(subrules, method = "paracoord")
+```
+
